@@ -1,0 +1,74 @@
+#!/bin/bash
+
+DISTRO="unassigned"
+Debian='debian
+os'
+string1="https://dl.google.com/linux/direct/"
+string2="google-chrome-stable_current_"
+dotDeb='amd64.deb'
+dotRPM='x86_64.rpm'
+getSigningKey="-q -O - https://dl.google.com/linux/linux_signing_key.pub"
+signingKey="linux_signing_key.pub"
+
+get_distro()
+{
+	UNAME=$(uname | tr "[:upper:]" "[:lower:]")
+	# If Linux, try to determine specific distribution
+	if [ "$UNAME" == "linux" ]; then
+		# If available, use LSB to identify distribution
+		if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
+			DISTRO=$(lsb_release -i | cut -d: -f2 | sed s/'^\t'//)
+		# Otherwise, use release info file
+		else
+			DISTRO=$(ls -d /etc/[A-Za-z]*[_-][rv]e[lr]* | grep -v "lsb" | cut -d'/' -f3 | cut -d'-' -f1 | cut -d'_' -f1)
+		fi
+	fi
+	# For everything else (or if above failed, just use generic identifier
+	[ "$DISTRO" == "" ] && DISTRO=$UNAME
+	unset UNAME
+}
+
+install_chrome()
+{
+	if [ "$DISTRO" = "Kali" -o "$DISTRO" = "$Debian" ] ; then
+		if [ "$USER" = "root" ] ; then
+			wgetString="$string1$string2$dotDeb"
+			packageString="$string2$dotDeb"
+			wget $wgetString
+			wget $getsigningKey | sudo apt-ket add -
+			sudo dpkg -i $packageString
+			sudo apt-get install -f
+		else echo "You must be logged in as root to run this script. Type 'su' then enter your password and try again"
+		fi
+	elif [ "$DISTRO" = "Ubuntu" -o "$DISTRO" = "LinuxMint" ] ; then
+		wgetString="$string1$string2$arch$dotDeb"
+		packageString="$string2$arch$dotDeb"
+		wget $wgetString
+		wget $getsigningKey | sudo apt-ket add -
+		sudo dpkg -i $packageString
+		sudo apt-get install -f
+	elif [ "$DISTRO" = "Fedora" ] ; then
+		wgetString="$string1$string2$dotRPM"
+		packageString="$string2$dotRPM"
+		wget $wgetString
+		wget $getsigningKey
+		sudo rpm --import $signingKey
+		sudo dnf install $packageString
+	elif [ "$DISTRO" = "SUSE LINUX" ] ; then
+		wgetString="$string1$string2$dotRPM"
+		packageString="$string2$dotRPM"
+		wget $wgetString
+		wget $getsigningKey
+		sudo rpm --import $signingKey
+		sudo zypper install $packageString
+	else echo "Distro " $DISTRO " not supported yet"
+	fi
+}
+
+get_distro
+
+if [ -x /bin/google-chrome -o -x /usr/bin/google-chrome ] ; then
+	echo "Chrome already installed"
+else
+	install_chrome
+fi
