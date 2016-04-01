@@ -3,8 +3,8 @@ The Linux version of FixMyChrome is a bash script that downloads and installs ch
 ------------------------------------------------------------------------------------------------------------------------------
 
 Instructions:
-   After downloading the file, right-click it and open "properties". In properties, make sure the tickbox to allow executing the file as a program is checked. 
+   After downloading the file, right-click it and open "properties". In properties, make sure the tickbox to allow executing the file as a program is checked. Then open a terminal, enter "su", provide your password, then drag and drop the file into the terminal window. This will create a link to the file's location so you can run it without having to enter the full path.
 
---------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
 
 The get_distro() function is reused code created by Jared Breland. The only change made to his original script - found here: http://www.legroom.net/2010/05/05/generic-method-determine-linux-or-unix-distribution-name - was giving it a return rather than an export value for use as a function.
