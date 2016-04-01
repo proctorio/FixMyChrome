@@ -1,0 +1,10 @@
+The Linux version of FixMyChrome is a bash script that downloads and installs chrome manually. This should be used only as a workaround in case a normal graphical installation won't work. Currently LinuxGetChrome supports Debian, Linux Mint, Ubuntu, Kali, Fedora, and Open Suse, and more distributions will be added in the near future.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+Instructions:
+   After downloading the file, right-click it and open "properties". In properties, make sure the tickbox to allow executing the file as a program is checked. 
+
+--------------------------------------------------
+
+The get_distro() function is reused code created by Jared Breland. The only change made to his original script - found here: http://www.legroom.net/2010/05/05/generic-method-determine-linux-or-unix-distribution-name - was giving it a return rather than an export value for use as a function.
